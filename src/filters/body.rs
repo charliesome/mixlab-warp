@@ -22,10 +22,10 @@ use crate::reject::{self, Rejection};
 
 type BoxError = Box<dyn StdError + Send + Sync>;
 
-// Extracts the `Body` Stream from the route.
-//
-// Does not consume any of it.
-pub(crate) fn body() -> impl Filter<Extract = (Body,), Error = Rejection> + Copy {
+/// Extracts the `Body` Stream from the route.
+///
+/// Does not consume any of it.
+pub fn body() -> impl Filter<Extract = (Body,), Error = Rejection> + Copy {
     filter_fn_one(|route| {
         future::ready(route.take_body().ok_or_else(|| {
             log::error!("request body already taken in previous filter");
